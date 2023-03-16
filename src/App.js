@@ -9,7 +9,7 @@ function App() {
   // let serverData = ['강남 우동 맛집', '인생이 힘들때', '프론트엔드 개발자가 되려면?'];
   let [title, setTitle] = useState(['남자코트 추천', '강남 우동맛집', '파이썬독학']);
   let [likeNum, setLikeNum] = useState(0);
-
+  let [modal, setModal] = useState('닫힘');
 
   return (
     <div className='App'>
@@ -19,26 +19,55 @@ function App() {
         copy[0] = '여자코트 추천'
         setTitle(copy); // 상태변경함수는 기존state와 신규state가 같은지 비교한 후, 같으면 동작x, 즉, 달라야지 재렌더링 해준다.
       }}>첫 글 수정</button>
+      <button onClick={() => {
+        let sortedArr = [...title].sort();
+        setTitle(sortedArr);
+
+      }}>가나다순 정렬</button>
       <div className='list'>
         <h4>{title[0]} <span onClick={() => {
           setLikeNum(likeNum + 1)
         }}>👍</span> {likeNum} </h4>
         <p>3월 16일 발행</p>
-
       </div>{ }
       <div className='list'>
         <h4>{title[1]}</h4>
         <p>3월 16일 발행</p>
       </div>
       <div className='list'>
-        <h4>{title[2]}</h4>
+        <h4 onClick={() => {
+          if (modal === '닫힘') {
+            setModal('열림');
+          } else if (modal === '열림') {
+            setModal('닫힘');
+          }
+        }}>{title[2]}</h4>
         <p>3월 16일 발행</p>
         <div></div>
       </div>
 
+      {
+        modal === '열림' ? <Modal></Modal> : null
+      }
+
+
     </div>
   );
 }
+
+function Modal() {
+  return (
+    <div className='modal'>
+      <h4>제목</h4>
+      <p>날짜</p>
+      <p>상세내용</p>
+    </div>
+  )
+}
+
+
+
+
 
 export default App;
 

@@ -19,3 +19,15 @@ div {
   color: white;
   padding-left: 20px;
 }
+
+.modal {
+  background: #eee;
+  text-align: left;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.footer {
+  margin-top: 250px;
+  background-color: aliceblue;
+}
