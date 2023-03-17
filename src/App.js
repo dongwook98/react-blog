@@ -8,14 +8,14 @@ function App() {
 
   // let serverData = ['강남 우동 맛집', '인생이 힘들때', '프론트엔드 개발자가 되려면?'];
   let [title, setTitle] = useState(['남자코트 추천', '강남 우동맛집', '파이썬독학']);
-  let [likeNum, setLikeNum] = useState(0);
-  let [modal, setModal] = useState(false); // step2. 동적 UI 현재 상태 저장
+  let [likeNum, setLikeNum] = useState([0, 0, 0]);
+  let [modal, setModal] = useState([false, false, false]); // step2. 동적 UI 현재 상태 저장
 
   return (
     <div className='App'>
       <div className='black-nav'><h4>동욱의 블로그</h4></div>
 
-      <button onClick={() => {
+      {/* <button onClick={() => {
         let copy = [...title]; // 배열은 참조타입이므로 수정하는게 아니고 복사하고 독립적인 배열을 만든 후 수정해야지 상태변경함수가 잘 작동할 것이다.
         copy[0] = '여자코트 추천'
         setTitle(copy); // 상태변경함수는 기존state와 신규state가 같은지 비교한 후, 같으면 동작x, 즉, 달라야지 재렌더링 해준다.
@@ -47,7 +47,29 @@ function App() {
         <p>3월 16일 발행</p>
       </div>
       {modal ? <Modal></Modal> : null}
-      {/* ▲ JSX에서는 if문 못쓰므로 삼항연산자 사용 */}
+      ▲ JSX에서는 if문 못쓰므로 삼항연산자 사용 */}
+
+
+      {
+        title.map((el, i) => {
+          return (
+            <div className='list' key={i}>
+              <h4>{el}
+                <span onClick={() => {
+                  let copy = [...likeNum];
+                  copy[i] = copy[i] + 1;
+                  setLikeNum(copy);
+                }}>👍
+                </span>
+                {likeNum[i]}
+              </h4>
+              <p>3월 16일 발행</p>
+
+            </div>
+
+          )
+        })
+      }
     </div>
   );
 }
