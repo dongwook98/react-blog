@@ -8,8 +8,8 @@ function App() {
 
   // let serverData = ['강남 우동 맛집', '인생이 힘들때', '프론트엔드 개발자가 되려면?'];
   let [title, setTitle] = useState(['남자코트 추천', '강남 우동맛집', '파이썬독학']);
-  let [likeNum, setLikeNum] = useState([0, 0, 0]);
-  let [modal, setModal] = useState([false, false, false]); // step2. 동적 UI 현재 상태 저장
+  let [likeNum, setLikeNum] = useState([0, 0, 0]); // 
+  let [modal, setModal] = useState(false); // 동적 UI 현재 상태를 저장
 
   return (
     <div className='App'>
@@ -46,15 +46,15 @@ function App() {
         }}>{title[2]}</h4>
         <p>3월 16일 발행</p>
       </div>
-      {modal ? <Modal></Modal> : null}
+      {modal ? <Modal></Modal> : null} // 모달창의 상태를 state로 저장했으니 true일때는 모달창이 뜨게 false일때는 아무것도 안뜨게 null을 사용했다.
       ▲ JSX에서는 if문 못쓰므로 삼항연산자 사용 */}
 
 
       {
-        title.map((el, i) => {
+        title.map((title, i) => {
           return (
             <div className='list' key={i}>
-              <h4>{el}
+              <h4 onClick={() => { setModal(!modal) }}>{title}
                 <span onClick={() => {
                   let copy = [...likeNum];
                   copy[i] = copy[i] + 1;
@@ -66,27 +66,31 @@ function App() {
               <p>3월 16일 발행</p>
 
             </div>
-
           )
         })
       }
+
+      {modal ? <Modal title={title} setTitle={setTitle} /> : null}
+      {/* 부모 -> 자식 state 전송하는 법 1. <자식컴포넌트 작명={state이름}> */}
     </div>
   );
 }
 
-function Modal() {
+// 모달창 컴포넌트
+function Modal(props) {
   return (
     <div className='modal'>
-      <h4>제목</h4>
+      <h4>{props.title[0]}</h4>
       <p>날짜</p>
       <p>상세내용</p>
-    </div>
+      <button onClick={() => {
+        let copy = [...props.title];
+        copy[0] = '여자코트 추천';
+        props.setTitle(copy);
+      }}>글수정</button>
+    </div >
   )
 }
-
-
-
-
 
 export default App;
 
