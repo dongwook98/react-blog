@@ -8,7 +8,7 @@ function App() {
 
   // let serverData = ['강남 우동 맛집', '인생이 힘들때', '프론트엔드 개발자가 되려면?'];
   let [title, setTitle] = useState(['남자코트 추천', '강남 우동맛집', '파이썬독학']);
-  let [likeNum, setLikeNum] = useState([0, 0, 0]); // 
+  let [likeNum, setLikeNum] = useState([0, 0, 0]); // 각각의 좋아요 수를 배열로 한번에 저장!
   let [modal, setModal] = useState(false); // 동적 UI 현재 상태를 저장
 
   return (
@@ -64,14 +64,19 @@ function App() {
                 {likeNum[i]}
               </h4>
               <p>3월 16일 발행</p>
-
             </div>
           )
         })
       }
+      {/* map함수로 html생성 */}
 
-      {modal ? <Modal title={title} setTitle={setTitle} /> : null}
-      {/* 부모 -> 자식 state 전송하는 법 1. <자식컴포넌트 작명={state이름}> */}
+      {modal ? <Modal title={title} setTitle={setTitle} color='orange' /> : null}
+      {modal ? <Modal title={title} setTitle={setTitle} color='yellow' /> : null}
+      {modal ? <Modal title={title} setTitle={setTitle} color='skyblue' /> : null}
+      {/* 부모(App 컴포넌트) -> 자식(Modal 컴포넌트) state 전송하는 법 
+        1. <자식컴포넌트 작명={state이름}> 
+        2. 자식컴포넌트 만드는 function으로 가서 props라는 파라미터 등록 후 props.작명 사용
+      */}
     </div>
   );
 }
@@ -79,7 +84,7 @@ function App() {
 // 모달창 컴포넌트
 function Modal(props) {
   return (
-    <div className='modal'>
+    <div className='modal' style={{ background: props.color }}>
       <h4>{props.title[0]}</h4>
       <p>날짜</p>
       <p>상세내용</p>
