@@ -10,6 +10,7 @@ function App() {
   let [title, setTitle] = useState(['남자코트 추천', '강남 우동맛집', '파이썬독학']);
   let [likeNum, setLikeNum] = useState([0, 0, 0]); // 각각의 좋아요 수를 배열로 한번에 저장!
   let [modal, setModal] = useState(false); // 동적 UI 현재 상태를 저장
+  let [viewTitle, setviewTitle] = useState(1);
 
   return (
     <div className='App'>
@@ -51,10 +52,10 @@ function App() {
 
 
       {
-        title.map((title, i) => {
+        title.map((el, i) => {
           return (
             <div className='list' key={i}>
-              <h4 onClick={() => { setModal(!modal) }}>{title}
+              <h4 onClick={() => { setModal(!modal); setviewTitle(i); }}>{el}
                 <span onClick={() => {
                   let copy = [...likeNum];
                   copy[i] = copy[i] + 1;
@@ -68,11 +69,15 @@ function App() {
           )
         })
       }
+
+      {/* <button onClick={() => { setviewTitle(0) }}>글제목0</button>
+      <button onClick={() => { setviewTitle(1) }}>글제목1</button>
+      <button onClick={() => { setviewTitle(2) }}>글제목2</button> */}
+
+      {modal ? <Modal viewTitle={viewTitle} title={title} setTitle={setTitle} /> : null}
       {/* map함수로 html생성 */}
 
-      {modal ? <Modal title={title} setTitle={setTitle} color='orange' /> : null}
-      {modal ? <Modal title={title} setTitle={setTitle} color='yellow' /> : null}
-      {modal ? <Modal title={title} setTitle={setTitle} color='skyblue' /> : null}
+
       {/* 부모(App 컴포넌트) -> 자식(Modal 컴포넌트) state 전송하는 법 
         1. <자식컴포넌트 작명={state이름}> 
         2. 자식컴포넌트 만드는 function으로 가서 props라는 파라미터 등록 후 props.작명 사용
@@ -83,9 +88,13 @@ function App() {
 
 // 모달창 컴포넌트
 function Modal(props) {
+
   return (
     <div className='modal' style={{ background: props.color }}>
-      <h4>{props.title[0]}</h4>
+      {console.log(props.title)}
+      {/* 지금 누른 글 제목이 모달창안에 뜨게 하려면??
+      // 1.  */}
+      <h4>{props.title[props.viewTitle]}</h4>
       <p>날짜</p>
       <p>상세내용</p>
       <button onClick={() => {
