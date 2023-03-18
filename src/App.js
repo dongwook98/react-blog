@@ -1,7 +1,8 @@
 /* eslint-disable */
-
+import React, { Component } from 'react';
 import './App.css';
 import { useState } from 'react';
+import { render } from '@testing-library/react';
 
 
 function App() {
@@ -11,6 +12,8 @@ function App() {
   let [likeNum, setLikeNum] = useState([0, 0, 0]); // 각각의 좋아요 수를 배열로 한번에 저장!
   let [modal, setModal] = useState(false); // 동적 UI 현재 상태를 저장
   let [viewTitle, setviewTitle] = useState(1);
+  let [input, setInput] = useState('');
+  let [date, setDate] = useState(Date());
 
   return (
     <div className='App'>
@@ -56,7 +59,8 @@ function App() {
           return (
             <div className='list' key={i}>
               <h4 onClick={() => { setModal(!modal); setviewTitle(i); }}>{el}
-                <span onClick={() => {
+                <span onClick={(e) => {
+                  e.stopPropagation();
                   let copy = [...likeNum];
                   copy[i] = copy[i] + 1;
                   setLikeNum(copy);
@@ -65,35 +69,49 @@ function App() {
                 {likeNum[i]}
               </h4>
               <p>3월 16일 발행</p>
+              <button onClick={() => {
+                // 클릭한 곳만 삭제해야한다.
+                // 0번째 삭제버튼 누르면 0번째 title state 삭제
+                // 1번째 삭제버튼 누르면 1번째 title state 삭제
+                // 2번째 삭제버튼 누르면 2번째 title state 삭제
+                let copy = [...title];
+                copy.splice(i, 1);
+                setTitle(copy);
+              }}>삭제</button>
             </div>
           )
         })
       }
-
-      {/* <button onClick={() => { setviewTitle(0) }}>글제목0</button>
-      <button onClick={() => { setviewTitle(1) }}>글제목1</button>
-      <button onClick={() => { setviewTitle(2) }}>글제목2</button> */}
-
-      {modal ? <Modal viewTitle={viewTitle} title={title} setTitle={setTitle} /> : null}
       {/* map함수로 html생성 */}
 
+      <input onInput={(e) => {
+        setInput(e.target.value); // state변경함수는 늦게처리됨 (비동기 처리) 
+        console.log('input', input)
+      }} type="text" />
+      <button onClick={() => {
+        // title에 인풋값추가
+        if (!input) {
+          return;
+        }
+        setTitle([input, ...title]);
+        setLikeNum([0, ...likeNum]);
+      }}>글 발행</button>
 
+      {modal ? <Modal viewTitle={viewTitle} title={title} setTitle={setTitle} /> : null}
       {/* 부모(App 컴포넌트) -> 자식(Modal 컴포넌트) state 전송하는 법 
         1. <자식컴포넌트 작명={state이름}> 
         2. 자식컴포넌트 만드는 function으로 가서 props라는 파라미터 등록 후 props.작명 사용
       */}
+
+      <Modal2></Modal2>
     </div>
   );
 }
 
 // 모달창 컴포넌트
 function Modal(props) {
-
   return (
     <div className='modal' style={{ background: props.color }}>
-      {console.log(props.title)}
-      {/* 지금 누른 글 제목이 모달창안에 뜨게 하려면??
-      // 1.  */}
       <h4>{props.title[props.viewTitle]}</h4>
       <p>날짜</p>
       <p>상세내용</p>
@@ -105,6 +123,27 @@ function Modal(props) {
     </div >
   )
 }
+
+class Modal2 extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: 'kim',
+      age: 20,
+    }
+  }
+  render() {
+    return (
+      <div>안녕 {this.state.age}
+        <button onClick={() => {
+          this.setState({ age: 21 })
+        }}>버튼</button>
+      </div>
+    )
+  }
+}
+
+
 
 export default App;
 
